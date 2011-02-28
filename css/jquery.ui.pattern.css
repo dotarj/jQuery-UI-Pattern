@@ -1,0 +1,17 @@
+/*
+ * jQuery UI Pattern @VERSION
+ *
+ * Copyright 2011, Arjen Post (http://arjenpost.nl)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://arjenpost.nl/license
+ *
+ * http://arjenpost.nl/#pattern
+ */
+ .ui-pattern{overflow:hidden;position:relative;}
+.ui-patter-line-container,.ui-patter-arrow-container{position:absolute;top:0;left:0;bottom:0;right:0;}
+.ui-pattern-row{clear:left;}
+.ui-pattern-node{background:url(../img/node.png) no-repeat 0 0;display:inline;height:118px;margin:20px;width:118px;float:left;}
+.ui-state-disabled.ui-pattern-node{background-position:-118px 0;}
+.ui-pattern-selected{background-position:-236px 0;}
+.ui-pattern-correct{background-position:-354px 0;}
+.ui-pattern-incorrect{background-position:-472px 0;}

@@ -39,7 +39,8 @@ $.widget('ui.pattern', $.ui.mouse, {
 		lineOpacity: 0.3,
 		lineColor: '#fff',
 		arrowCorrectImage: '',
-		arrowIncorrectImage: ''
+		arrowIncorrectImage: '',
+		multiSelect: false
     },
 	
 	// default functions
@@ -136,9 +137,11 @@ $.widget('ui.pattern', $.ui.mouse, {
 		if(!this._started)
 			return false;
 			
+		var self = this;
+		
 		var node = this.element
 			.find('.ui-pattern-node')
-			.filter(function() { return $(this).attr('selected') !== 'selected'; })
+			.filter(function() { return this != self._previousNode[0] && (self.options.multiSelect === true || $(this).attr('selected') !== 'selected'); } )
 			.hitTest(event.pageX - this._nodecontainer.offset().left, event.pageY - this._nodecontainer.offset().top);
 		
 		if(node.length > 0)
@@ -328,7 +331,7 @@ $.widget('ui.pattern', $.ui.mouse, {
 			.find('.ui-pattern-node')
 			.filter(function() { return parseInt($(this).attr('x')) == x && parseInt($(this).attr('y')) == y; });
 		
-		if(node.attr('selected') === 'selected')
+		if(this.options.multiSelect !== true && node.attr('selected') === 'selected')
 			return this._getNode(x, y, directionX, directionY);
 		else
 			return node;

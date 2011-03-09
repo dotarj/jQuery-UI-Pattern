@@ -21,9 +21,9 @@ THE SOFTWARE.
 --- Table of contents -----------------------------------------------
 
 1	Overview
-1.1 Dependencies
-1.2 Default usage
-1.3 To-do list
+1.1	Dependencies
+1.2	Default usage
+1.3	To-do list
 
 2	Options
 2.1	arrowCorrectImage
@@ -34,6 +34,7 @@ THE SOFTWARE.
 2.6	lineColor
 2.7	lineOpacity
 2.8	lineWidth
+2.9	multiSelect
 
 3	Events
 3.1	create
@@ -79,12 +80,12 @@ $('.selector').pattern(
 
 --- 1.3 To-do list --------------------------------------------------
 
-	- Allow a node to be selected more than once
+	- Enable keyboard support
 	- Make pattern compatible with touch devices
 
 --- 2 Options -------------------------------------------------------
 
---- 2.1 arrowCorrectImage  ------------------------------------------
+--- 2.1 arrowCorrectImage -------------------------------------------
 
 Name: arrowCorrectImage
 Type: String
@@ -106,7 +107,7 @@ var arrowCorrectImage = $( ".selector" ).pattern( "option",
 $( ".selector" ).pattern( "option", "arrowCorrectImage", 
 'img/arrow-correct.png' );
 
---- 2.2 arrowIncorrectImage  ----------------------------------------
+--- 2.2 arrowIncorrectImage -----------------------------------------
 
 Name: arrowIncorrectImage
 Type: String
@@ -128,7 +129,7 @@ var arrowIncorrectImage = $( ".selector" ).pattern( "option",
 $( ".selector" ).pattern( "option", "arrowIncorrectImage", 
 'img/arrow-incorrect.png' );
 
---- 2.3 clearDelay  -------------------------------------------------
+--- 2.3 clearDelay --------------------------------------------------
 
 Name: clearDelay
 Type: Number
@@ -147,7 +148,7 @@ var clearDelay = $( ".selector" ).pattern( "option", "clearDelay" );
 //setter
 $( ".selector" ).pattern( "option", "clearDelay", 2000 );
 
---- 2.4 disabled  ---------------------------------------------------
+--- 2.4 disabled ----------------------------------------------------
 
 Name: disabled
 Type: Boolean
@@ -166,7 +167,7 @@ var disabled = $( ".selector" ).pattern( "option", "disabled" );
 //setter
 $( ".selector" ).pattern( "option", "disabled", true );
 
---- 2.5 gridSize  ---------------------------------------------------
+--- 2.5 gridSize ----------------------------------------------------
 
 Name: gridSize
 Type: Number
@@ -184,7 +185,7 @@ var gridSize = $( ".selector" ).pattern( "option", "gridSize" );
 //setter
 $( ".selector" ).pattern( "option", "gridSize", 3 );
 
---- 2.6 lineColor  --------------------------------------------------
+--- 2.6 lineColor ---------------------------------------------------
 
 Name: lineColor
 Type: String
@@ -203,7 +204,7 @@ var lineColor = $( ".selector" ).pattern( "option", "lineColor" );
 //setter
 $( ".selector" ).pattern( "option", "lineColor", '#fff' );
 
---- 2.7 lineOpacity  ------------------------------------------------
+--- 2.7 lineOpacity -------------------------------------------------
 
 Name: lineOpacity
 Type: Number
@@ -223,7 +224,7 @@ var lineOpacity = $( ".selector" ).pattern( "option",
 //setter
 $( ".selector" ).pattern( "option", "lineOpacity", 0.3 );
 
---- 2.8 lineWidth  --------------------------------------------------
+--- 2.8 lineWidth ---------------------------------------------------
 
 Name: lineWidth
 Type: Number
@@ -242,9 +243,27 @@ var lineWidth = $( ".selector" ).pattern( "option", "lineWidth" );
 //setter
 $( ".selector" ).pattern( "option", "lineWidth", 45 );
 
+--- 2.9 multiSelect -------------------------------------------------
+
+Name: multiSelect
+Type: Boolean
+Default: false
+
+Description:
+If true, allows nodes to be selected multiple times.
+
+Code examples:
+Initialize a pattern with the multiSelect option specified.
+$( ".selector" ).pattern({ multiSelect: true });
+Get or set the multiSelect option, after init.
+//getter
+var multiSelect = $( ".selector" ).pattern( "option", "multiSelect" );
+//setter
+$( ".selector" ).pattern( "option", "multiSelect", true );
+
 --- 3 Events --------------------------------------------------------
 
---- 3.1 create  -----------------------------------------------------
+--- 3.1 create ------------------------------------------------------
 
 Name: create
 Type: patterncreate
@@ -263,7 +282,7 @@ $( ".selector" ).bind( "patterncreate", function(event, ui) {
   ...
 });
 
---- 3.2 start  ------------------------------------------------------
+--- 3.2 start -------------------------------------------------------
 
 Name: start
 Type: patternstart
@@ -283,7 +302,7 @@ $( ".selector" ).bind( "patternstart", function(event, ui) {
   ...
 });
 
---- 3.4 change  -----------------------------------------------------
+--- 3.4 change ------------------------------------------------------
 
 Name: change
 Type: patternchange
@@ -303,7 +322,7 @@ $( ".selector" ).bind( "patternchange", function(event, ui) {
   ...
 });
 
---- 3.4 stop  -------------------------------------------------------
+--- 3.4 stop --------------------------------------------------------
 
 Name: stop
 Type: patternstop
@@ -325,52 +344,52 @@ $( ".selector" ).bind( "patternstop", function(event, ui) {
 
 --- 4 Methods -------------------------------------------------------
 
---- 4.1 clearPattern  -----------------------------------------------
+--- 4.1 clearPattern ------------------------------------------------
 
 clearPattern
 .pattern( "clearPattern" )
 Clears the current pattern after the specified delay (see 
 clearDelay).
 
---- 4.2 destroy  ----------------------------------------------------
+--- 4.2 destroy -----------------------------------------------------
 
 destroy
 .pattern( "destroy" )
 Remove the pattern functionality completely. This will return the 
 element back to its pre-init state.
 
---- 4.3 disable  ----------------------------------------------------
+--- 4.3 disable -----------------------------------------------------
 
 disable
 .pattern( "disable" )
 Disable the pattern.
 
---- 4.4 enable  -----------------------------------------------------
+--- 4.4 enable ------------------------------------------------------
 
 enable
 .pattern( "enable" )
 Enable the pattern.
 
---- 4.5 option  -----------------------------------------------------
+--- 4.5 option ------------------------------------------------------
 
 option
 .pattern( "option" , optionName , [value] )
 Get or set any pattern option. If no value is specified, will act as 
 a getter.
 
---- 4.6 option  -----------------------------------------------------
+--- 4.6 option ------------------------------------------------------
 
 option
 .pattern( "option" , options )
 Set multiple pattern options at once by providing an options object.
 
---- 4.7 pattern  ----------------------------------------------------
+--- 4.7 pattern -----------------------------------------------------
 
 pattern
 .pattern( "pattern" )
 Get the currently selected pattern.
 
---- 4.8 widget  -----------------------------------------------------
+--- 4.8 widget ------------------------------------------------------
 
 widget
 .pattern( "widget" )

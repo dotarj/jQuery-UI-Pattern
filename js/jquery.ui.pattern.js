@@ -15,7 +15,7 @@
 (function( $ ) {
 
 $.fn.hitTest = function( x, y ) {
-        var matched = [];
+		var matched = [];
 		
 		this.each(function() {
 			var position = $(this).position();
@@ -31,6 +31,7 @@ $.fn.hitTest = function( x, y ) {
 };
 
 $.widget('ui.pattern', $.ui.mouse, {
+  widgetEventPrefix: 'pattern',
 	options: {
 		gridSize: 3,
 		showPattern: true,
@@ -41,7 +42,7 @@ $.widget('ui.pattern', $.ui.mouse, {
 		arrowCorrectImage: '',
 		arrowIncorrectImage: '',
 		multiSelect: false
-    },
+	},
 	
 	// default functions
 	
@@ -85,7 +86,7 @@ $.widget('ui.pattern', $.ui.mouse, {
 	},
 	destroy: function() {
 		this.element
-            .unbind('.' + this.widgetName)
+			.unbind('.' + this.widgetName)
 			.removeClass('ui-pattern ui-widget ui-state-default ui-state-disabled')
 			.children()
 			.remove();
@@ -162,13 +163,7 @@ $.widget('ui.pattern', $.ui.mouse, {
 	
 		if(node.length > 0)
 		{
-			this._clear();
-			
-			this._cachedCoordinates = [];
-			
-			this._trigger('start', event);
-
-			this._started = true;
+	  this._start();
 			
 			this._selectNode($(node[0]), event);
 		}
@@ -176,6 +171,24 @@ $.widget('ui.pattern', $.ui.mouse, {
 		return true;
 	},
 	_mouseStop: function(event) {
+		this._stop(event);
+	},
+	
+	// ui.mouse overrides
+	
+	// internal functions
+  
+	_start: function(event) {
+	this._clear();
+	
+	this._cachedCoordinates = [];
+	
+	this._trigger('start', event);
+
+	this._started = true;
+  },
+  
+	_stop: function(event) {
 		this._waitingForClear = true;
 			
 		this._started = false;
@@ -184,11 +197,7 @@ $.widget('ui.pattern', $.ui.mouse, {
 			this._drawLines();
 		
 		this._trigger('stop', event, { pattern: this._pattern });
-	},
-	
-	// ui.mouse overrides
-	
-	// internal functions
+  },
 	
 	_clear: function() {
 		if(this._timer)
@@ -233,18 +242,132 @@ $.widget('ui.pattern', $.ui.mouse, {
 			.children()
 			.remove();
 		
+		var self = this;
+		
 		for(var y = 0; y < this.options.gridSize; y++)
 		{
 			var row = $('<div></div>').addClass('ui-pattern-row');;
 			
 			for(var x = 0; x < this.options.gridSize; x++)
 			{
-				$('<div></div>')
-					.addClass('ui-pattern-node')
-					.attr('x', x)
-					.attr('y', y)
-					.attr('value', y * this.options.gridSize + x + 1)
-					.appendTo(row);
+				$('<a href="#"></a>')
+				.addClass('ui-pattern-node')
+				.attr('x', x)
+				.attr('y', y)
+				.attr('value', y * this.options.gridSize + x + 1)
+				.click(function(event) {
+					event.preventDefault();
+				})
+				.hover(function() {
+					if (!self.options.disabled)
+					$(this).addClass('ui-state-hover');
+				}, 
+					function() {
+					$(this).removeClass('ui-state-hover');
+				})
+				.focus(function() {
+					if (!self.options.disabled) {
+						$('.ui-pattern-node .ui-state-focus').removeClass('ui-state-focus');
+						$(this).addClass('ui-state-focus');
+					}
+					else
+						$(this).blur();
+				})
+				.blur(function() {
+					$(this).removeClass('ui-state-focus');
+				})
+				.keydown(function(event) {
+					var nodeX = parseInt(jQuery(this).attr('x'));
+					var nodeY = parseInt(jQuery(this).attr('y'));
+					
+					if(event.keyCode == jQuery.ui.keyCode.UP)
+					{
+						if(nodeY > 0)
+						{
+							var node = self.element
+								.find('.ui-pattern-node')
+								.filter(function() { return parseInt(jQuery(this).attr('x')) == nodeX && parseInt(jQuery(this).attr('y')) == nodeY - 1; });
+								
+							node.focus();
+								
+							event.preventDefault();
+						}
+					}
+					else if(event.keyCode == jQuery.ui.keyCode.DOWN)
+					{
+						if(nodeY < self.options.gridSize - 1)
+						{
+							var node = self.element
+								.find('.ui-pattern-node')
+								.filter(function() { return parseInt(jQuery(this).attr('x')) == nodeX && parseInt(jQuery(this).attr('y')) == nodeY + 1; });
+								
+							node.focus();
+								
+							event.preventDefault();
+						}
+					}
+					else if(event.keyCode == jQuery.ui.keyCode.LEFT)
+					{
+						if(nodeX > 0)
+						{
+							var node = self.element
+								.find('.ui-pattern-node')
+								.filter(function() { return parseInt(jQuery(this).attr('x')) == nodeX - 1 && parseInt(jQuery(this).attr('y')) == nodeY; });
+								
+							node.focus();
+								
+							event.preventDefault();
+						}
+					}
+					else if(event.keyCode == jQuery.ui.keyCode.RIGHT)
+					{
+						if(nodeX < self.options.gridSize - 1)
+						{
+							var node = self.element
+								.find('.ui-pattern-node')
+								.filter(function() { return parseInt(jQuery(this).attr('x')) == nodeX + 1 && parseInt(jQuery(this).attr('y')) == nodeY; });
+								
+							node.focus();
+								
+							event.preventDefault();
+						}
+					}
+					else if(event.keyCode == jQuery.ui.keyCode.SPACE)
+					{
+						if (self.options.disabled || self._waitingForClear)
+						return;
+					
+						var node = self.element
+						.find('.ui-pattern-node')
+						.filter(function() { return $(this).attr('selected') === 'selected'; });
+					
+						if(!node.length)
+							self._start();
+						
+						if((!self._previousNode || this != self._previousNode[0]) && (self.options.multiSelect === true || $(this).attr('selected') !== 'selected'))
+						{
+							self._selectNode($(this), event);
+						
+							if(self.options.showPattern === true)
+								self._drawLines(null);
+								
+							event.preventDefault();
+						}
+					}
+					else if(event.keyCode == jQuery.ui.keyCode.ENTER)
+					{
+						if (self.options.disabled || self._waitingForClear)
+							return;
+					
+						var node = self.element
+						.find('.ui-pattern-node')
+						.filter(function() { return $(this).attr('selected') === 'selected'; });
+						
+						if(node.length)
+							self._stop(event);
+					}
+				})
+				.appendTo(row);
 			}
 			
 			this._nodecontainer.append(row);
@@ -469,6 +592,10 @@ $.widget('ui.pattern', $.ui.mouse, {
 	}
 	
 	// public functions
+});
+
+$.extend($.ui.pattern, {
+		version: '@VERSION'
 });
 
 })( jQuery );

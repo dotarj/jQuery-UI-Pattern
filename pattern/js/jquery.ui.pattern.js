@@ -162,8 +162,7 @@ $.widget( "ui.pattern", $.ui.mouse, {
 		.find( ".ui-pattern-node" )
 		.hitTest( event.pageX - this._nodecontainer.offset().left, event.pageY - this._nodecontainer.offset().top );
 
-		if ( node.length )
-		{
+		if ( node.length ) {
 			this._start();
 			this._selectNode( $(node[0]), event );
 		}
@@ -599,8 +598,7 @@ $.widget( "ui.pattern", $.ui.mouse, {
 
 		this._waitingForClear = false;
 
-		if (correct === false || this.options.showPattern === true)
-		{
+		if (correct === false || this.options.showPattern === true) {
 			if ( correct === true ) {
 				selectedClass = "ui-pattern-correct";
 			} else {

@@ -70,6 +70,7 @@ $('.selector').pattern(
 
 --- 1.3 To-do list --------------------------------------------------
 
+	- Enable keyboard support
 	- Make pattern compatible with touch devices
 
 --- 2 Options -------------------------------------------------------
